@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FTP Freelancer — Wireless Camera Tethering, Auto Framing &amp; Google Drive Sync</title>
+  <style>
+    :root {
+      --bg: #f0f9ff;
+      --card: #ffffff;
+      --sub: #e0f2fe;
+      --border: #bae6fd;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --dark: #0c4a6e;
+      --text: #1e293b;
+      --muted: #475569;
+      --teal: #0d9488;
+      --green-bg: #dcfce7;
+      --green-text: #166534;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--dark);
+      text-decoration: none;
+    }
+    .brand small {
+      font-size: 12px;
+      color: var(--primary);
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      color: var(--dark);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .nav-link:hover { background: var(--sub); }
+    .lang-btn {
+      background: var(--card);
+      color: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .lang-btn:hover { background: var(--sub); }
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 34px 30px;
+      box-shadow: 0 8px 24px rgba(12, 74, 110, 0.06);
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--sub);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      color: var(--dark);
+      font-size: 34px;
+      line-height: 1.2;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 740px;
+    }
+    .cta-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--primary); color: #ffffff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-soft {
+      background: var(--sub);
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+    .section-title {
+      margin: 30px 0 14px;
+      font-size: 22px;
+      color: var(--dark);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16.5px;
+      color: var(--dark);
+    }
+    .card p, .card li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pricing-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .pricing-card.featured {
+      border: 2px solid var(--primary);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
+    }
+    .plan-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--green-bg);
+      color: var(--green-text);
+      margin-bottom: 8px;
+      width: fit-content;
+    }
+    .price {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 6px 0 12px;
+    }
+    .price span { font-size: 13px; color: var(--muted); font-weight: 600; }
+    ul {
+      padding-left: 18px;
+      margin: 8px 0 18px;
+    }
+    li + li { margin-top: 6px; }
+    .transparency {
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .transparency h2 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      color: var(--dark);
+    }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 34px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="topbar">
+      <a class="brand" href="index.html">FTP Freelancer <small>v1.1.2</small></a>
+      <div class="nav-right">
+        <a class="nav-link" href="#features" data-en="Features" data-vi="Tính năng">Features</a>
+        <a class="nav-link" href="#pricing" data-en="Pricing" data-vi="Bảng giá">Pricing</a>
+        <a class="nav-link" href="privacy.html" data-en="Privacy Policy" data-vi="Chính sách bảo mật">Privacy Policy</a>
+        <a class="nav-link" href="terms.html" data-en="Terms" data-vi="Điều khoản">Terms</a>
+        <button class="lang-btn" id="langToggle" type="button">Tiếng Việt</button>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <span class="badge" data-en="Windows PC &amp; Android Mobile • Powered by kodaklee" data-vi="Windows PC &amp; Điện thoại Android • Powered by kodaklee">Windows PC &amp; Android Mobile • Powered by kodaklee</span>
+      <h1 data-en="Wireless Camera Tethering &amp; Instant Cloud Workflow" data-vi="Giải pháp Chụp Ảnh Không Dây &amp; Đồng Bộ Đám Mây Tức Thì">Wireless Camera Tethering &amp; Instant Cloud Workflow</h1>
+      <p class="subtitle" data-en="Transfer JPG &amp; RAW shots directly from Sony and wireless FTP cameras to your phone, Windows PC, client QR gallery, Google Drive, OneDrive, or NAS in seconds." data-vi="Nhận ảnh JPG &amp; RAW trực tiếp từ máy ảnh không dây về điện thoại, máy tính Windows, thư viện QR cho khách và tự động sao lưu lên Google Drive, OneDrive hoặc NAS trong tích tắc.">
+        Transfer JPG &amp; RAW shots directly from Sony and wireless FTP cameras to your phone, Windows PC, client QR gallery, Google Drive, OneDrive, or NAS in seconds.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="#pricing" data-en="View Editions &amp; Order" data-vi="Xem Bảng Giá &amp; Mua Bản Quyền">View Editions &amp; Order</a>
+        <a class="btn btn-soft" href="mailto:ledangkhoa1996@gmail.com?subject=FTP%20Freelancer%20License%20Inquiry" data-en="Contact Support / Demo" data-vi="Liên hệ Tư vấn &amp; Cấp Bản Quyền">Contact Support / Demo</a>
+        <a class="btn btn-soft" href="privacy.html" data-en="Google Drive Privacy Policy" data-vi="Chính sách Bảo mật Google Drive">Google Drive Privacy Policy</a>
+      </div>
+    </header>
+
+    <h2 class="section-title" id="features" data-en="Core Capabilities" data-vi="Tính Năng Nổi Bật">Core Capabilities</h2>
+    <section class="grid">
+      <div class="card">
+        <h3 data-en="Wireless Camera FTP Station" data-vi="Trạm Nhận Ảnh FTP Không Dây">Wireless Camera FTP Station</h3>
+        <p data-en="Receives JPG &amp; RAW photos over local Wi-Fi or mobile Hotspot without cables, built with active/passive mode compatibility for Sony cameras." data-vi="Nhận ảnh JPG &amp; RAW trực tiếp qua Wi-Fi nội bộ hoặc Điểm phát sóng điện thoại không cần dây, tương thích máy ảnh Sony.">
+          Receives JPG &amp; RAW photos over local Wi-Fi or mobile Hotspot without cables, built with active/passive mode compatibility for Sony cameras.
+        </p>
+      </div>
+      <div class="card">
+        <h3 data-en="Direct Google Drive &amp; Cloud Sync" data-vi="Liên Kết Google Drive, OneDrive &amp; NAS">Direct Google Drive &amp; Cloud Sync</h3>
+        <p data-en="Photographers sign in directly with Google OAuth 2.0, choose or create a target folder, and automatically upload event shots straight from the field." data-vi="Đăng nhập trực tiếp tài khoản Google trên app, chọn hoặc tạo thư mục Drive mới để ảnh chụp tự đẩy thẳng lên đám mây không cần chờ PC.">
+          Photographers sign in directly with Google OAuth 2.0, choose or create a target folder, and automatically upload event shots straight from the field.
+        </p>
+      </div>
+      <div class="card">
+        <h3 data-en="Auto Framing &amp; Client QR Gallery" data-vi="Ghép Khung Tự Động &amp; Chia Sẻ QR">Auto Framing &amp; Client QR Gallery</h3>
+        <p data-en="Automatically overlays landscape/portrait PNG frames with blend modes and shares instant event photo galleries to clients via QR code." data-vi="Tự động ghép khung ảnh ngang/dọc chuyên nghiệp và tạo mã QR thư viện ảnh bảo mật để khách xem tải ngay tại sự kiện.">
+          Automatically overlays landscape/portrait PNG frames with blend modes and shares instant event photo galleries to clients via QR code.
+        </p>
+      </div>
+      <div class="card">
+        <h3 data-en="Multi-Phone Team Sync" data-vi="Kết Nối Đa Máy Team Thợ Ảnh">Multi-Phone Team Sync</h3>
+        <p data-en="Pair multiple Android photographer phones with a host PC via quick connect code or QR without sharing account passwords." data-vi="Kết nối nhiều điện thoại thợ chụp về chung 1 máy chủ Windows qua Mã PC / quét QR nhanh chóng mà không cần dùng chung mật khẩu.">
+          Pair multiple Android photographer phones with a host PC via quick connect code or QR without sharing account passwords.
+        </p>
+      </div>
+    </section>
+
+    <h2 class="section-title" id="pricing" data-en="Plans &amp; Licensing" data-vi="Bảng Giá Phần Mềm">Plans &amp; Licensing</h2>
+    <section class="grid">
+      <div class="pricing-card">
+        <div>
+          <h3 data-en="PLUS EDITION" data-vi="GÓI PLUS">PLUS EDITION</h3>
+          <div class="price">99,000 VND <span data-en="/ month" data-vi="/ tháng">/ month</span></div>
+          <ul>
+            <li data-en="Unlimited team phone sync" data-vi="Đồng bộ không giới hạn máy phụ">Unlimited team phone sync</li>
+            <li data-en="High-speed 4G remote sync" data-vi="Đồng bộ 4G từ xa tốc độ cao">High-speed 4G remote sync</li>
+            <li data-en="Secure client QR photo gallery" data-vi="Thư viện ảnh &amp; QR bảo mật cho khách">Secure client QR photo gallery</li>
+            <li data-en="Feature updates during subscription" data-vi="Cập nhật tính năng mới suốt hạn gói">Feature updates during subscription</li>
+          </ul>
+        </div>
+        <a class="btn btn-soft" href="mailto:ledangkhoa1996@gmail.com?subject=Order%20FTP%20Freelancer%20PLUS" data-en="Request Plus License" data-vi="Đăng ký Gói Plus">Request Plus License</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div>
+          <span class="plan-tag" data-en="MOST POPULAR" data-vi="PHỔ BIẾN NHẤT">MOST POPULAR</span>
+          <h3 data-en="PRO EDITION" data-vi="GÓI PRO">PRO EDITION</h3>
+          <div class="price">1,990,000 VND <span data-en="/ year" data-vi="/ năm">/ year</span></div>
+          <ul>
+            <li data-en="All Plus benefits + direct camera workflows" data-vi="Toàn bộ quyền lợi Plus + Kết nối máy ảnh">All Plus benefits + direct camera workflows</li>
+            <li data-en="Background Google Drive / Cloud backup" data-vi="Tự động sao lưu Đám mây chạy nền">Background Google Drive / Cloud backup</li>
+            <li data-en="Automated Landscape/Portrait framing" data-vi="Tự động gắn khung ảnh Ngang/Dọc">Automated Landscape/Portrait framing</li>
+            <li data-en="All new software upgrades included" data-vi="Nhận toàn bộ bản nâng cấp mới nhất">All new software upgrades included</li>
+          </ul>
+        </div>
+        <a class="btn btn-primary" href="mailto:ledangkhoa1996@gmail.com?subject=Order%20FTP%20Freelancer%20PRO" data-en="Request Pro License" data-vi="Đăng ký Gói Pro">Request Pro License</a>
+      </div>
+
+      <div class="pricing-card">
+        <div>
+          <h3 data-en="PERPETUAL (LIFETIME)" data-vi="BẢN VĨNH VIỄN">PERPETUAL (LIFETIME)</h3>
+          <div class="price">3,490,000 VND <span data-en="/ one-time" data-vi="/ lần mua">/ one-time</span></div>
+          <ul>
+            <li data-en="Permanent license for current feature release" data-vi="Sở hữu vĩnh viễn mốc tính năng hiện hành">Permanent license for current feature release</li>
+            <li data-en="Lifetime bug-fix maintenance updates" data-vi="Chính sách bản quyền: vá lỗi trọn đời">Lifetime bug-fix maintenance updates</li>
+            <li data-en="Excludes future major feature branches" data-vi="Không bao gồm tính năng nhánh phát hành mới sau">Excludes future major feature branches</li>
+          </ul>
+        </div>
+        <a class="btn btn-soft" href="mailto:ledangkhoa1996@gmail.com?subject=Order%20FTP%20Freelancer%20Lifetime" data-en="Request Lifetime License" data-vi="Đăng ký Bản Vĩnh Viễn">Request Lifetime License</a>
+      </div>
+    </section>
+
+    <section class="transparency">
+      <h2 data-en="Google Drive Data Usage &amp; Transparency" data-vi="Minh Bạch Dữ Liệu Google Drive">Google Drive Data Usage &amp; Transparency</h2>
+      <ul>
+        <li data-en="Scope Requested: https://www.googleapis.com/auth/drive is used exclusively to list folders for your selection, create organized event subfolders (Folder/User/JPG &amp; RAW), and upload photos transferred during your session." data-vi="Phạm vi quyền (https://www.googleapis.com/auth/drive): chỉ dùng để hiển thị thư mục bạn chọn, tạo thư mục sự kiện con (JPG/RAW) và tải ảnh chụp của bạn lên đúng thư mục đó.">
+          Scope Requested: <code>https://www.googleapis.com/auth/drive</code> is used exclusively to list folders for your selection, create organized event subfolders (<code>Folder/User/JPG</code> &amp; <code>RAW</code>), and upload photos transferred during your session.
+        </li>
+        <li data-en="On-Device Security: OAuth tokens are stored privately on your own device and never sold or shared with third parties." data-vi="Bảo mật trên thiết bị: Token OAuth chỉ lưu cục bộ trong bộ nhớ riêng của ứng dụng trên máy bạn, không chia sẻ hay bán dữ liệu cho bên thứ ba.">
+          On-Device Security: OAuth tokens are stored privately on your own device and never sold or shared with third parties.
+        </li>
+        <li>
+          <span data-en="Users can disconnect anytime inside the app or revoke permission via Google Account Permissions." data-vi="Người dùng có thể ngắt kết nối bất kỳ lúc nào trong app hoặc thu hồi quyền tại Google Account Permissions.">
+            Users can disconnect anytime inside the app or revoke permission via
+          </span>
+          <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account Permissions</a>.
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>
+        <strong>FTP Freelancer</strong> — Powered by kodaklee<br />
+        Contact &amp; Support: <a href="mailto:ledangkhoa1996@gmail.com">ledangkhoa1996@gmail.com</a> •
+        <a href="privacy.html">Privacy Policy</a> •
+        <a href="terms.html">Terms of Service</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      let lang = "en";
+      const btn = document.getElementById("langToggle");
+      function applyLang() {
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-en]").forEach(function (el) {
+          const val = el.getAttribute(lang === "vi" ? "data-vi" : "data-en");
+          if (val !== null) el.textContent = val;
+        });
+        btn.textContent = lang === "en" ? "Tiếng Việt" : "English";
+      }
+      btn.addEventListener("click", function () {
+        lang = lang === "en" ? "vi" : "en";
+        applyLang();
+      });
+    })();
+  </script>
+</body>
+</html>
